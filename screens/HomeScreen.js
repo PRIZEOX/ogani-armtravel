@@ -1,22 +1,37 @@
 import { useNavigation } from '@react-navigation/native'
-import { useLayoutEffect } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { View, Text, Image, TextInput, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {UserCircleIcon} from 'react-native-heroicons/outline'
 import {ChevronDownIcon, MagnifyingGlassIcon, AdjustmentsHorizontalIcon} from 'react-native-heroicons/solid'
 import Categorys from '../components/category/Categorys';
 import FeaturedRow from '../components/suggestions/FeaturedRow';
+import { client } from '../lib/client';
+
 
 const HomeScreen = () => {
     const navigation = useNavigation();
+    [featuredCategory, setFeaturedCategory] = useState([]);
     useLayoutEffect(()=> {
         navigation.setOptions({
             headerShown:false, 
         })
     }, [])
 
+    useEffect(()=>{
+        client.fetch(
+            `*[_type =="featured" ]`
+        ).then((data) => {
+            setFeaturedCategory(data);
+        })
+    }, [])
+
+
+
+    
+
     return (
-        <SafeAreaView className='px-3 bg-zinc-100 mt-4'>
+        <SafeAreaView className='px-3 bg-zinc-100 mt-4 flex-1'>
             {/* Header */}
             <View className='flex-row pb-3 items-center mx-2 justify-between '>
                 <View className=''>
@@ -43,16 +58,19 @@ const HomeScreen = () => {
             </View>
 
             {/* Body */}
-            <ScrollView>
-                {/* Category */}
-                <Categorys/>
+            
+            <ScrollView showsVerticalScrollIndicator={false} className='flex-1'>
 
                 {/* Featured rows */}
-                <FeaturedRow
-                    id= '1'
-                    title = 'Hotels'
-                    description='hotels very good'
-                />
+
+                {featuredCategory.map(category =>(
+                    <FeaturedRow
+                        key={category._id}
+                        id={category._id}
+                        description={category.desc}
+                        title={category.name}
+                    />
+                ))}
             </ScrollView>
         </SafeAreaView>        
     )

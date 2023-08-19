@@ -1,11 +1,34 @@
 import { View, Text, Touchable, TouchableOpacity, ScrollView } from 'react-native'
 import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import SuggestionCard from './SuggestionCard'
+import { useEffect, useState } from 'react'
+import { client } from '../../lib/client'
 
 
 const FeaturedRow = ({id,title, description}) => {
+
+  const [hotels,setHotels] = useState([]);
+
+
+  useEffect(()=>{
+    client.fetch(
+      `
+      *[_type =="featured" && _id == $id  ]{
+        hotels[] ->{
+          ...
+        }
+      }[0]
+      `, {id}
+    ).then(data => {
+      setHotels(data?.hotels);
+    });
+  }, [])
+
+
+
+
   return (
-    <View>
+    <View className='my-2'>
         <View className='mt-4 flex-row justify-between px-3 items-center'>
            <Text className='text-lg font-bold '>{title}</Text>
            <TouchableOpacity>
@@ -13,10 +36,25 @@ const FeaturedRow = ({id,title, description}) => {
            </TouchableOpacity>
         </View>
         <Text className='text-xs px-3 text-gray-400'>{description}</Text>
-        <ScrollView className='pt-5'
-         horizontal showsHorizontalScrollIndicator={false}>
-            <SuggestionCard rate={4.53} name={'Villa, Ani Resort'} cost={550} roomsCount={4} square={235} imgUrl='https://via.placeholder.com/300x336'/>
-            <SuggestionCard rate={4.23} name={'Villa, Ararat Valley'} cost={350} roomsCount={2} square={167} imgUrl='https://via.placeholder.com/300x336'/>
+        <ScrollView className='pt-4'
+         horizontal showsHorizontalScrollIndicator={false}
+         contentContainerStyle = {{
+          paddingHorizontal: 15,
+         }}
+        >
+          {hotels?.map((item) => (
+            <SuggestionCard
+              key={item._id}
+              id={item._id}
+              imgUrl={item.hotel_image}
+              roomsCount={item.room_count}
+              name={item.name}
+              rate={item.rate}
+              square={item.square}
+              cost={item.cost}
+            />
+          ))}
+
         </ScrollView>
     </View>
   )

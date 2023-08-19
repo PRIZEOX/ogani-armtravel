@@ -1,15 +1,16 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { HeartIcon } from 'react-native-heroicons/outline'
 import { ArrowsPointingOutIcon, StarIcon, UserGroupIcon } from 'react-native-heroicons/solid'
+import { urlFor } from '../../lib/client'
 
-const SuggestionCard = ({name, imgUrl, rate, square, roomsCount, cost}) => {
+const SuggestionCard = ({id,name, imgUrl, rate, square, roomsCount, cost}) => {
   return (
     <TouchableOpacity className='px-3' activeOpacity={0.6}>
       {/* Picture */}
 
       <View className='relative '>
         <Image className='rounded-3xl w-72 h-80' source={{
-            uri: imgUrl
+            uri: urlFor(imgUrl).url(),
         }}
         />
         
@@ -25,8 +26,8 @@ const SuggestionCard = ({name, imgUrl, rate, square, roomsCount, cost}) => {
             </View>
             {/* Favorite */}
 
-            <TouchableOpacity activeOpacity={0.7}>
-              <HeartIcon size={24} color='#ffffff'/>
+            <TouchableOpacity  activeOpacity={0.7}>
+              <HeartIcon size={24} className='bg-neutral-400 p-5 blur-xl' color='#ffffff'/>
             </TouchableOpacity>
           </View>
         </View>
@@ -34,13 +35,16 @@ const SuggestionCard = ({name, imgUrl, rate, square, roomsCount, cost}) => {
 
       {/* Desc */}
       <View className='px-1 mt-5'>
-        <View className='flex-row items-center justify-between'> 
-          <Text className='text-lg'>{name}</Text>
-          <Text className='text-lg text-cyan-600'>{'\u0024'} {cost}</Text>
+        <View className='flex-row items-center justify-between mb-4'> 
+          <Text className='text-lg w-56'>{name}</Text>
+          <View>
+            <Text className='text-lg text-cyan-600'>{'\u0024'} {cost}</Text>
+            <Text className='text-xs text-gray-400 text-right'>
+              per day
+            </Text>
+          </View>
         </View>
-        <Text className='text-xs text-gray-400 text-right'>
-          per month
-        </Text>
+        
         <View className='flex-row space-x-4 items-center'>
           <View className='space-x-1 flex-row items-center'>
             <UserGroupIcon size={22} color='#A1A7B0'/>
@@ -48,8 +52,7 @@ const SuggestionCard = ({name, imgUrl, rate, square, roomsCount, cost}) => {
           </View>
           <View className='space-x-1 flex-row items-center'>
             <ArrowsPointingOutIcon size={22} color='#A1A7B0'/>
-            <Text className='text-gray-400 text-sm'>{square}m</Text>
-            <Text className='text-xs text-gray-400 absolute pb-4 pl-14'>2</Text>
+            <Text className='text-gray-400 text-sm'>{square}м²</Text>
           </View>
         </View>
       </View>

@@ -17,14 +17,15 @@ export default{
         },
         {
             name:'hotels',
-            title:'Hotels',
-            type:'array',
-            of:[
+            title: 'Hotels',
+            type: 'array',
+            of: [
                 {
                     type:'reference',
-                    to : [{type:'hotel'}]
+                    to: [{type:'hotel'}]
                 }
-            ],
-        },
+            ]
+        }
+        
     ]
 }
