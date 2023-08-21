@@ -29,18 +29,17 @@ const FeaturedRow = ({id,title, description}) => {
 
   return (
     <View className='my-2'>
-        <View className='mt-4 flex-row justify-between px-3 items-center'>
-           <Text className='text-lg font-bold '>{title}</Text>
-           <TouchableOpacity>
-               <ArrowRightIcon className='relative' size={20} color='#4C9FC1'/>
-           </TouchableOpacity>
-        </View>
-        <Text className='text-xs px-3 text-gray-400'>{description}</Text>
+        <TouchableOpacity activeOpacity={0.59}>
+          <View className='mt-4 flex-row justify-between px-3 items-center'>
+            <Text className='text-lg font-bold '>{title}</Text>
+            <TouchableOpacity>
+                <ArrowRightIcon className='relative' size={20} color='#4C9FC1'/>
+            </TouchableOpacity>
+          </View>
+          <Text className='text-xs px-3 text-gray-400'>{description}</Text>
+        </TouchableOpacity>
         <ScrollView className='pt-4'
          horizontal showsHorizontalScrollIndicator={false}
-         contentContainerStyle = {{
-          paddingHorizontal: 15,
-         }}
         >
           {hotels?.map((item) => (
             <SuggestionCard
@@ -52,6 +51,9 @@ const FeaturedRow = ({id,title, description}) => {
               rate={item.rate}
               square={item.square}
               cost={item.cost}
+              adres={item.adres}
+              desc={item.description}
+              assets={item.assets}
             />
           ))}
 

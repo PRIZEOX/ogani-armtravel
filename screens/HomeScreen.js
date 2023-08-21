@@ -1,17 +1,18 @@
 import { useNavigation } from '@react-navigation/native'
 import { useEffect, useLayoutEffect, useState } from 'react'
-import { View, Text, Image, TextInput, ScrollView } from 'react-native'
+import { View, Text, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {UserCircleIcon} from 'react-native-heroicons/outline'
 import {ChevronDownIcon, MagnifyingGlassIcon, AdjustmentsHorizontalIcon} from 'react-native-heroicons/solid'
-import Categorys from '../components/category/Categorys';
 import FeaturedRow from '../components/suggestions/FeaturedRow';
 import { client } from '../lib/client';
 
 
 const HomeScreen = () => {
     const navigation = useNavigation();
-    [featuredCategory, setFeaturedCategory] = useState([]);
+
+    const [featuredCategory, setFeaturedCategory] = useState([]);
+    const [city, setCity] = useState('Yerevan')
     useLayoutEffect(()=> {
         navigation.setOptions({
             headerShown:false, 
@@ -20,9 +21,13 @@ const HomeScreen = () => {
 
     useEffect(()=>{
         client.fetch(
-            `*[_type =="featured" ]`
+            `*[_type == 'city' && name==$city]{
+                featured[]->{
+                  ...
+                }
+              }[0]`, {city}
         ).then((data) => {
-            setFeaturedCategory(data);
+            setFeaturedCategory(data.featured);
         })
     }, [])
 
@@ -31,7 +36,7 @@ const HomeScreen = () => {
     
 
     return (
-        <SafeAreaView className='px-3 bg-zinc-100 mt-4 flex-1'>
+        <SafeAreaView className='px-4 bg-zinc-100 mt-4 flex-1'>
             {/* Header */}
             <View className='flex-row pb-3 items-center mx-2 justify-between '>
                 <View className=''>
@@ -39,9 +44,11 @@ const HomeScreen = () => {
                         You here!
                     </Text>
                     <View className= 'flex-row items-center space-x-1'>
-                        <Text className='font-bold text-xl'>
-                            Yerevan
-                        </Text>
+                        <TouchableOpacity activeOpacity={0.6}>
+                            <Text className='font-bold text-xl'>
+                                {city}
+                            </Text>
+                        </TouchableOpacity>
                         <ChevronDownIcon size={18} color='#A1A7B0'/>
                     </View>
                 </View>

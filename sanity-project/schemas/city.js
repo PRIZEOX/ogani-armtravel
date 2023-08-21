@@ -10,8 +10,8 @@ export default{
             validation: Rule => Rule.required(),
         },
         {
-            name: 'hotels',
-            title: 'City hotels',
+            name: 'featured',
+            title: 'City featured',
             type: 'array',
             of:[
                 {

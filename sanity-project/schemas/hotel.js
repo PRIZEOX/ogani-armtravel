@@ -12,6 +12,12 @@ export default {
       {
         name:'hotel_image',
         type: 'image',
+        title:'Main hotel image',
+      },
+      {
+        name:'assets',
+        type:'array',
+        of: [{type:'image'}]
       },
       {
         name: 'description',
