@@ -6,10 +6,17 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen'
 import HotelScreen from './screens/HotelScreen';
 import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
+import Tabs from './navigators/Tabs';
 
 
 
 const Stack = createNativeStackNavigator();
+
+function Main(){
+  return(
+    <Tabs/>
+  )
+}
 
 export default function App() {
   return (
@@ -17,7 +24,7 @@ export default function App() {
       <NavigationContainer>
         <TailwindProvider>
           <Stack.Navigator>
-            <Stack.Screen name='Home' component={HomeScreen}/>
+            <Stack.Screen name='Main' component={Main} options={{headerShown:false}}/>
             <Stack.Screen name='Hotel' component={HotelScreen}/>
           </Stack.Navigator>
         </TailwindProvider>

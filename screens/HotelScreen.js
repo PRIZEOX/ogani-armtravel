@@ -1,19 +1,21 @@
 
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
+import { StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeftIcon, ChatBubbleOvalLeftIcon } from 'react-native-heroicons/outline';
-import { ArrowsPointingOutIcon, UserGroupIcon } from 'react-native-heroicons/solid'
+import { ArrowLeftIcon, ChatBubbleOvalLeftIcon, HeartIcon } from 'react-native-heroicons/outline';
+import { ArrowsPointingOutIcon, UserGroupIcon, StarIcon } from 'react-native-heroicons/solid'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import SlideItem from '../components/hotel/SlideItem';
-import Slider from '../components/hotel/Slider';
+import { urlFor } from '../lib/client';
+
 
 
 
 const HotelScreen = () => {
 
     const navigation = useNavigation();
+    [tip, setTip] = useState(true)
 
     useLayoutEffect(()=> {
         navigation.setOptions({
@@ -35,6 +37,7 @@ const HotelScreen = () => {
         assets,
     }} = useRoute()
 
+    
 
   return (
     <SafeAreaView className='bg-zinc-100 mt-4 flex-1 px-6'>
@@ -47,6 +50,31 @@ const HotelScreen = () => {
       </View>
 
       {/* Hotel Image */}
+      <ScrollView onScroll={() => setTip(false)}
+       pagingEnabled snapToAlignment='center' horizontal
+       className='p-0 space-x-7 mx-3 max-h-60' showsHorizontalScrollIndicator={false}>
+        {assets.map((image)=>(
+          <Image key={image._id} className='w-80 h-auto rounded-3xl justify-center'
+          source={{
+            uri: urlFor(image).url()
+          }}/>
+        ))}
+        
+      </ScrollView>
+      {tip && (
+        <Text className='text-gray-300 text-xs animate-pulse mt-1 my-0 p-0 text-center'>scroll to view</Text>
+      )}
+      
+
+
+      {/* <View className='flex-row space-x-1 justify-center'>
+        {assets.map((_, idx)=> (
+            <View key={idx.toString()} style={
+              idx === 3 && styles.dotActive
+            } className='w-2 h-2 bg-gray-400 rounded-full mt-2'></View>
+          )
+        )}
+      </View>
       <View className='relative '>
         <Image className='rounded-3xl w-auto h-56' source={{
             uri: urlFor(imgUrl).url(),
@@ -54,8 +82,8 @@ const HotelScreen = () => {
         />
         
         <View className='absolute p-4'>
-          <View className='flex-row items-center justify-between space-x-40'> 
-            {/* Rate */}
+          <View className='flex-row items-center justify-between space-x-56'> 
+             Rate 
 
             <View className='blur-xl rounded-2xl bg-neutral-400 flex-1'>
                 <View className='flex-row items-center px-2 py-1 space-x-2 w-16'>
@@ -63,16 +91,15 @@ const HotelScreen = () => {
                     <Text className='text-sm text-white'>{rate}</Text>
                 </View>
             </View>
-            {/* Favorite */}
+             Favorite 
 
             <TouchableOpacity  activeOpacity={0.7}>
               <HeartIcon size={24} className='bg-neutral-400 p-5 blur-xl' color='#ffffff'/>
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </View> */}
 
-      {/* <Slider images={assets}/> in development*/}
 
       {/* Name & Cost */}
       <View className='my-4'>
@@ -119,4 +146,24 @@ const HotelScreen = () => {
   )
 }
 
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    bottom: 35,
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginHorizontal: 3,
+    backgroundColor: '#ccc',
+  },
+  dotActive: {
+    backgroundColor: '#000',
+  },
+});
 export default HotelScreen
