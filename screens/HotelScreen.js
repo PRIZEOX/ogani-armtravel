@@ -15,7 +15,7 @@ import { urlFor } from '../lib/client';
 const HotelScreen = () => {
 
     const navigation = useNavigation();
-    [tip, setTip] = useState(true)
+
 
     useLayoutEffect(()=> {
         navigation.setOptions({
@@ -50,7 +50,7 @@ const HotelScreen = () => {
       </View>
 
       {/* Hotel Image */}
-      <ScrollView onScroll={() => setTip(false)}
+      <ScrollView 
        pagingEnabled snapToAlignment='center' horizontal
        className='p-0 space-x-7 mx-3 max-h-60' showsHorizontalScrollIndicator={false}>
         {assets.map((image)=>(
@@ -61,9 +61,6 @@ const HotelScreen = () => {
         ))}
         
       </ScrollView>
-      {tip && (
-        <Text className='text-gray-300 text-xs animate-pulse mt-1 my-0 p-0 text-center'>scroll to view</Text>
-      )}
       
 
 

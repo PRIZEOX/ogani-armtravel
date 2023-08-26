@@ -2,12 +2,12 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const FavoriteScreen = () => {
+const SettingsScreen = () => {
   return (
     <SafeAreaView>
-      <Text>FavoriteScreen</Text>
+      <Text>SettingsScreen</Text>
     </SafeAreaView>
   )
 }
 
-export default FavoriteScreen
+export default SettingsScreen
