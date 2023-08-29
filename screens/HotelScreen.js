@@ -1,6 +1,6 @@
 
-import React, { useLayoutEffect, useState } from 'react'
-import { StyleSheet } from 'react-native';
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { Pressable, StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { FlatList, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,22 +8,15 @@ import { ArrowLeftIcon, ChatBubbleOvalLeftIcon, HeartIcon } from 'react-native-h
 import { ArrowsPointingOutIcon, UserGroupIcon, StarIcon } from 'react-native-heroicons/solid'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { urlFor } from '../lib/client';
+import { AntDesign } from '@expo/vector-icons';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+import months from '../lib/moths';
+
 
 
 
 
 const HotelScreen = () => {
-
-    const navigation = useNavigation();
-
-
-    useLayoutEffect(()=> {
-        navigation.setOptions({
-            headerShown:false, 
-        })
-    }, [])
-
-
     const {params :{
         id,
         name,
@@ -37,7 +30,53 @@ const HotelScreen = () => {
         assets,
     }} = useRoute()
 
+
+    const navigation = useNavigation();
+    const today = new Date()
+    const [showA, setAShow] = useState(false)
+    const [showB, setBShow] = useState(false);
+    const [arrivalDate, setArrivalDate] = useState(new Date());
+    const [departureDate, setDepartureDate] = useState(
+      new Date(today.getFullYear(), today.getMonth(), today.getDate()+1)
+    );
     
+    const onArrivalChange = (event, selectedDate) =>{
+      setAShow(false);
+      setArrivalDate(selectedDate);
+    }
+
+    const onDepartureChange = (event, selectedDate) => {
+      setBShow(false);
+      setDepartureDate(selectedDate);
+    }
+
+    const getTotalCost = (start, end) => {
+      let monthsIncreaser = start.getMonth();
+      let finalDaysCount = months[start.getMonth()] - start.getDate();
+      while(monthsIncreaser != end.getMonth()){
+        monthsIncreaser += 1;
+        finalDaysCount += months[monthsIncreaser];
+      }
+      finalDaysCount -= months[end.getMonth()] - end.getDate();
+      return finalDaysCount * cost;
+    }
+
+    const getTotalDays = (start, end) => {
+      let monthsIncreaser = start.getMonth();
+      let finalDaysCount = months[start.getMonth()] - start.getDate();
+      while(monthsIncreaser != end.getMonth()){
+        monthsIncreaser += 1;
+        finalDaysCount += months[monthsIncreaser];
+      }
+      finalDaysCount -= months[end.getMonth()] - end.getDate();
+      return finalDaysCount;
+    }
+
+    useLayoutEffect(()=> {
+        navigation.setOptions({
+            headerShown:false, 
+        })
+    }, [])
 
   return (
     <SafeAreaView className='bg-zinc-100 mt-4 flex-1 px-6'>
@@ -54,49 +93,12 @@ const HotelScreen = () => {
        pagingEnabled snapToAlignment='center' horizontal
        className='p-0 space-x-7 mx-3 max-h-60' showsHorizontalScrollIndicator={false}>
         {assets.map((image)=>(
-          <Image key={image._id} className='w-80 h-auto rounded-3xl justify-center'
+          <Image key={image._id} id={image._id} className='w-80 h-auto rounded-3xl justify-center'
           source={{
             uri: urlFor(image).url()
           }}/>
         ))}
-        
       </ScrollView>
-      
-
-
-      {/* <View className='flex-row space-x-1 justify-center'>
-        {assets.map((_, idx)=> (
-            <View key={idx.toString()} style={
-              idx === 3 && styles.dotActive
-            } className='w-2 h-2 bg-gray-400 rounded-full mt-2'></View>
-          )
-        )}
-      </View>
-      <View className='relative '>
-        <Image className='rounded-3xl w-auto h-56' source={{
-            uri: urlFor(imgUrl).url(),
-        }}
-        />
-        
-        <View className='absolute p-4'>
-          <View className='flex-row items-center justify-between space-x-56'> 
-             Rate 
-
-            <View className='blur-xl rounded-2xl bg-neutral-400 flex-1'>
-                <View className='flex-row items-center px-2 py-1 space-x-2 w-16'>
-                    <StarIcon size={14} color='#FFD178' />
-                    <Text className='text-sm text-white'>{rate}</Text>
-                </View>
-            </View>
-             Favorite 
-
-            <TouchableOpacity  activeOpacity={0.7}>
-              <HeartIcon size={24} className='bg-neutral-400 p-5 blur-xl' color='#ffffff'/>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View> */}
-
 
       {/* Name & Cost */}
       <View className='my-4'>
@@ -130,37 +132,45 @@ const HotelScreen = () => {
       <Text className='w-auto text-base text-justify py-3'>{desc}</Text>
       <View className='border-solid border-gray-400 border-b opacity-50'></View>
 
-
       {/* Features */}
 
+      {/* Datepicker */}
+      <View className='mt-5 space-y-2'>
+        <Text className='text-xl text-center text-cyan-600 font-bold'>Booking time</Text>
+        <View className='justify-between flex-row'>
+          <View className='flex-row'>
+            <Pressable onPress={()=> setAShow(true)}>
+              <Text className='text-lg'>From <AntDesign name="caretdown" size={12} color="#4C9FC1" /> </Text>
+              <Text className='text-gray-400'>{arrivalDate.toLocaleDateString()}</Text>
+              {showA && (
+                <RNDateTimePicker value={arrivalDate}  maximumDate={departureDate} minimumDate={today} onChange={onArrivalChange}/>
+              )}
+            </Pressable>
+          </View>
+          <View className='flex-row'>
+            <Pressable onPress={() =>setBShow(true)}>
+              <Text className='text-lg'>To <AntDesign name="caretdown" size={12} color="#4C9FC1" /></Text>
+              <Text className='text-gray-400'>{departureDate.toLocaleDateString()}</Text>
+              {showB && (
+                <RNDateTimePicker value={departureDate} minimumDate={arrivalDate} onChange={onDepartureChange}/>
+              )}
+            </Pressable>
+          </View>
+        </View>
+      </View>
+      
       {/* Reservate */}
-      <View className='mt-10 flex-row justify-center'>
+      <View  className='flex-row mt-10 bg-white rounded-2xl py-3 px-4 justify-between w-auto items-center'>
+        <View>
+          <Text  className='text-lg text-black font-bold'>Total {'\u0024'} {getTotalCost(arrivalDate,departureDate)}</Text>
+          <Text className='text-sm text-gray-400'>for {getTotalDays(arrivalDate,departureDate)} day{getTotalDays(arrivalDate,departureDate)>1 && ('s')}</Text>
+        </View>
         <TouchableOpacity className='bg-cyan-600 w-32 h-12 rounded-xl' activeOpacity={0.5}>
             <Text className='text-center text-white py-3 px-5 text-base font-semibold'>Reservation</Text>
         </TouchableOpacity>
       </View>
+      
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    bottom: 35,
-    flexDirection: 'row',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginHorizontal: 3,
-    backgroundColor: '#ccc',
-  },
-  dotActive: {
-    backgroundColor: '#000',
-  },
-});
 export default HotelScreen
