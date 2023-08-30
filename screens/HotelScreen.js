@@ -20,7 +20,6 @@ const HotelScreen = () => {
     const {params :{
         id,
         name,
-        imgUrl,
         rate,
         square,
         roomsCount,
@@ -165,11 +164,11 @@ const HotelScreen = () => {
           <Text  className='text-lg text-black font-bold'>Total {'\u0024'} {getTotalCost(arrivalDate,departureDate)}</Text>
           <Text className='text-sm text-gray-400'>for {getTotalDays(arrivalDate,departureDate)} day{getTotalDays(arrivalDate,departureDate)>1 && ('s')}</Text>
         </View>
-        <TouchableOpacity className='bg-cyan-600 w-32 h-12 rounded-xl' activeOpacity={0.5}>
+        <TouchableOpacity 
+        className='bg-cyan-600 w-32 h-12 rounded-xl' activeOpacity={0.5}>
             <Text className='text-center text-white py-3 px-5 text-base font-semibold'>Reservation</Text>
         </TouchableOpacity>
       </View>
-      
     </SafeAreaView>
   )
 }

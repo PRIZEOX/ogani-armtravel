@@ -15,7 +15,6 @@ const SuggestionCard = ({id,name, imgUrl, rate, square, roomsCount, cost, adres,
      onPress={()=> navigation.navigate('Hotel', {
       id,
       name,
-      imgUrl,
       rate,
       square,
       roomsCount,

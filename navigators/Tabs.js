@@ -6,6 +6,7 @@ import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import React from 'react'
 import SettingsScreen from '../screens/SettingsScreen';
+import BookingScreen from '../screens/BookingScreen';
 
 const Tab = createBottomTabNavigator()
 
@@ -39,6 +40,10 @@ const Tabs = () => {
             tabBarIcon: ({color}) => (<AntDesign name="hearto" size={24} color={color} />)
           }}
         />
+        <Tab.Screen name='Booking' component={BookingScreen} options={{
+          headerShown:false,
+          tabBarIcon: ({color}) => (<AntDesign name="calendar" size={24} color={color} />)
+        }}/>
         <Tab.Screen name='Settings' component={SettingsScreen} options={{
           headerShown:false,
           tabBarIcon: ({color}) => (<Feather name="settings" size={24} color={color} />)
