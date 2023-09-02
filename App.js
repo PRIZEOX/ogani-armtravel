@@ -7,6 +7,9 @@ import HomeScreen from './screens/HomeScreen'
 import HotelScreen from './screens/HotelScreen';
 import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
 import Tabs from './navigators/Tabs';
+import { Provider } from 'react-redux'
+import { store } from './store';
+
 
 
 
@@ -22,12 +25,14 @@ export default function App() {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <NavigationContainer>
-        <TailwindProvider>
-          <Stack.Navigator>
-            <Stack.Screen name='Main' component={Main} options={{headerShown:false}}/>
-            <Stack.Screen name='Hotel' component={HotelScreen}/>
-          </Stack.Navigator>
-        </TailwindProvider>
+        <Provider store={store}>
+          <TailwindProvider>
+            <Stack.Navigator>
+              <Stack.Screen name='Main' component={Main} options={{headerShown:false}}/>
+              <Stack.Screen name='Hotel' component={HotelScreen}/>
+            </Stack.Navigator>
+          </TailwindProvider>
+        </Provider>
       </NavigationContainer>
     </SafeAreaProvider>
   );

@@ -1,16 +1,18 @@
 
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { Pressable, StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { FlatList, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native';
+import { Pressable, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeftIcon, ChatBubbleOvalLeftIcon, HeartIcon } from 'react-native-heroicons/outline';
+import { ArrowLeftIcon,  HeartIcon } from 'react-native-heroicons/outline';
+import HeartIconSolid from 'react-native-heroicons/solid'
 import { ArrowsPointingOutIcon, UserGroupIcon, StarIcon } from 'react-native-heroicons/solid'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { urlFor } from '../lib/client';
 import { AntDesign } from '@expo/vector-icons';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import months from '../lib/moths';
+import { useDispatch } from 'react-redux'
+import { addToFavorite } from '../features/favoriteSlices';
 
 
 
@@ -29,9 +31,14 @@ const HotelScreen = () => {
         assets,
     }} = useRoute()
 
-
+    
+    
+    
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const today = new Date()
+
+    const [isPressed, setIsPressed] = useState(false);
     const [showA, setAShow] = useState(false)
     const [showB, setBShow] = useState(false);
     const [arrivalDate, setArrivalDate] = useState(new Date());
@@ -39,6 +46,14 @@ const HotelScreen = () => {
       new Date(today.getFullYear(), today.getMonth(), today.getDate()+1)
     );
     
+    const handleFavoritePress = () =>{
+      setIsPressed(!isPressed);
+      if(isPressed){
+        dispatch(addToFavorite({id, name, rate, cost, roomsCount, square}))
+      }
+      
+    }
+
     const onArrivalChange = (event, selectedDate) =>{
       setAShow(false);
       setArrivalDate(selectedDate);
@@ -84,7 +99,9 @@ const HotelScreen = () => {
       <View className='flex-row justify-between mb-5 items-center'>
         <TouchableOpacity activeOpacity={0.6} onPress={() => { navigation.goBack() }
         }><ArrowLeftIcon size={32} color='#464646'/></TouchableOpacity>
-        <ChatBubbleOvalLeftIcon size={32} color='#464646'/>
+        <TouchableOpacity onPress={handleFavoritePress}>
+          {isPressed ? <HeartIconSolid color='#F26798' size={32}/> : <HeartIcon size={32} color='#464646'/> }
+        </TouchableOpacity>
       </View>
 
       {/* Hotel Image */}
