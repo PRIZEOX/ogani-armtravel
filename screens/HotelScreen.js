@@ -12,7 +12,7 @@ import { AntDesign } from '@expo/vector-icons';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import months from '../lib/moths';
 import { useDispatch } from 'react-redux'
-import { addToFavorite } from '../features/favoriteSlices';
+import { addToFavorite, removeFromFavorite } from '../features/favoriteSlices';
 
 
 
@@ -47,11 +47,12 @@ const HotelScreen = () => {
     );
     
     const handleFavoritePress = () =>{
-      setIsPressed(!isPressed);
-      if(isPressed){
+      if(!isPressed){
         dispatch(addToFavorite({id, name, rate, cost, roomsCount, square}))
+      }else{
+        dispatch(removeFromFavorite({id}));
       }
-      
+      setIsPressed(!isPressed);
     }
 
     const onArrivalChange = (event, selectedDate) =>{

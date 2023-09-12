@@ -26,6 +26,7 @@
     "react-native-screens": "~3.22.0",
     "react-native-svg": "13.9.0",
     "react-navigation": "^4.4.4",
+    "react-redux": "^8.1.2",
     "tailwindcss-react-native": "^1.7.10",
     "twrnc": "^3.6.4"
   },

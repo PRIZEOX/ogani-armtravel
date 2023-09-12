@@ -10,7 +10,19 @@ export const favoriteSlice = createSlice({
         state.items = [...state.items, action.payload];
     },
     removeFromFavorite: (state, action) =>{
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
 
+        let newFavorite = [...state.items];
+
+        if(index>=0){
+          newFavorite.splice(index,1);
+        }else{
+          console.warn(`
+            Cant remove hotel (id : ${action.payload.id}) cause its not in basket
+          `)
+        };
     }
   }
 })
